@@ -1,5 +1,13 @@
 import jwt from 'jsonwebtoken';
 import APIResponse from '../utils/response.js';
+import { loadKeysFromEnv } from '../utils/cryptoKeys.js';
+
+let keys;
+try {
+  keys = loadKeysFromEnv();
+} catch (err) {
+  // RS256 keys not configured, will fall back to HS256
+}
 
 function authMiddleware(req, res, next) {
   const token = req.headers.authorization?.replace('Bearer ', '');
@@ -11,7 +19,11 @@ function authMiddleware(req, res, next) {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Verify with appropriate key based on RS256/HS256 configuration
+    const decoded = keys
+      ? jwt.verify(token, keys.publicKey)
+      : jwt.verify(token, process.env.JWT_SECRET);
+
     req.user = decoded;
     next();
   } catch (err) {

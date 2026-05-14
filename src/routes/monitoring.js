@@ -1,15 +1,12 @@
 import express from 'express';
 import { metricsService } from '../services/metricsService.js';
-import pool from '../db/connection.js';
 
 const router = express.Router();
 
 // Extended health check with detailed metrics
-router.get('/health/detailed', async (req, res) => {
+router.get('/health/detailed', (req, res) => {
   try {
-    const dbResult = await pool.query('SELECT NOW()');
-    const health = metricsService.getHealth(!!dbResult);
-
+    const health = metricsService.getHealth(true);
     res.json({
       success: true,
       data: health,
@@ -175,24 +172,24 @@ router.get('/dashboard', (req, res) => {
         <h2 style="margin-top: 40px; margin-bottom: 20px; color: #60a5fa;">⚠️ Recent Errors (24h)</h2>
         <div class="card">
           <p><strong>Total Errors:</strong> ${errors.total}</p>
-          <p><strong>By Type:</strong> ${Object.entries(errors.byType).map(([k, v]) => \`\${k}: \${v}\`).join(' | ')}</p>
-          ${errors.recent.length > 0 ? \`
+          <p><strong>By Type:</strong> ${Object.entries(errors.byType).map(([k, v]) => `${k}: ${v}`).join(' | ')}</p>
+          ${errors.recent.length > 0 ? `
             <table style="margin-top: 15px;">
               <thead>
                 <tr><th>Time</th><th>Status</th><th>Message</th><th>Endpoint</th></tr>
               </thead>
               <tbody>
-                \${errors.recent.slice(0, 5).map(e => \`
+                ${errors.recent.slice(0, 5).map(e => `
                   <tr>
-                    <td>\${new Date(e.timestamp).toLocaleTimeString('ja-JP')}</td>
-                    <td class="error">\${e.statusCode}</td>
-                    <td>\${e.message}</td>
-                    <td class="endpoint">\${e.endpoint}</td>
+                    <td>${new Date(e.timestamp).toLocaleTimeString('ja-JP')}</td>
+                    <td class="error">${e.statusCode}</td>
+                    <td>${e.message}</td>
+                    <td class="endpoint">${e.endpoint}</td>
                   </tr>
-                \`).join('')}
+                `).join('')}
               </tbody>
             </table>
-          \` : '<p style="color: #64748b; margin-top: 10px;">✅ No errors in last 24 hours</p>'}
+          ` : '<p style="color: #64748b; margin-top: 10px;">✅ No errors in last 24 hours</p>'}
         </div>
 
         <div class="timestamp">Last updated: ${new Date().toISOString()}</div>

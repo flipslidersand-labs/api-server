@@ -4,23 +4,21 @@ import APIResponse from '../utils/response.js';
 class TaskController {
   async getTasks(req, res, next) {
     try {
-      const { status_id, assigned_to, limit = 50, offset = 0 } = req.query;
+      const { status_id, assigned_to, q, due_before, due_after, limit = 50, offset = 0 } = req.query;
+      const lim = Math.min(Math.max(1, parseInt(limit)), 200);
+      const off = Math.max(0, parseInt(offset));
 
       const result = await taskService.getTasks({
         status_id: status_id ? parseInt(status_id) : undefined,
         assigned_to,
-        limit: parseInt(limit),
-        offset: parseInt(offset)
+        q: q?.trim() || undefined,
+        due_before: due_before || undefined,
+        due_after: due_after || undefined,
+        limit: lim,
+        offset: off,
       });
 
-      res.json(
-        APIResponse.paginated(
-          result.tasks,
-          result.total_count,
-          parseInt(limit),
-          parseInt(offset)
-        )
-      );
+      res.json(APIResponse.paginated(result.tasks, result.total_count, lim, off));
     } catch (err) {
       next(err);
     }
@@ -78,6 +76,18 @@ class TaskController {
 
       res.json(APIResponse.success({ success: true }));
     } catch (err) {
+      next(err);
+    }
+  }
+
+  async updateTask(req, res, next) {
+    try {
+      const { title, description, assigned_to, due_date } = req.body;
+      const task = await taskService.updateTask(req.params.task_id, { title, description, assigned_to, due_date });
+      res.json(APIResponse.success(task));
+    } catch (err) {
+      const status = err.status ?? 500;
+      if (status !== 500) return res.status(status).json(APIResponse.error(err.code, err.message));
       next(err);
     }
   }

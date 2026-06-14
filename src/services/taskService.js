@@ -14,9 +14,18 @@ class TaskService {
     if (filters.status_id) {
       query = query.eq('current_status_id', filters.status_id);
     }
-
     if (filters.assigned_to) {
       query = query.eq('assigned_to', filters.assigned_to);
+    }
+    if (filters.q) {
+      // Full-text-style search on title and description
+      query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%`);
+    }
+    if (filters.due_before) {
+      query = query.lte('due_date', filters.due_before);
+    }
+    if (filters.due_after) {
+      query = query.gte('due_date', filters.due_after);
     }
 
     query = query.eq('is_deleted', false).order('created_at', { ascending: false });
@@ -26,13 +35,9 @@ class TaskService {
     }
 
     const { data, error, count } = await query;
-
     if (error) throw error;
 
-    return {
-      tasks: data,
-      total_count: count || 0
-    };
+    return { tasks: data, total_count: count || 0 };
   }
 
   async getTask(taskId) {
@@ -116,6 +121,32 @@ class TaskService {
     if (logError) throw logError;
 
     return { success: true };
+  }
+
+  async updateTask(taskId, fields) {
+    const allowed = ['title', 'description', 'assigned_to', 'due_date'];
+    const updates = {};
+    for (const key of allowed) {
+      if (Object.prototype.hasOwnProperty.call(fields, key)) {
+        updates[key] = fields[key];
+      }
+    }
+    if (Object.keys(updates).length === 0) {
+      throw Object.assign(new Error('No updatable fields provided'), { code: 'VALIDATION_ERROR', status: 400 });
+    }
+    updates.updated_at = new Date().toISOString();
+
+    const { data, error } = await supabase
+      .from('tasks')
+      .update(updates)
+      .eq('id', taskId)
+      .eq('is_deleted', false)
+      .select('*, task_statuses(id, name, code, is_terminal, color)')
+      .single();
+
+    if (error) throw error;
+    if (!data) throw Object.assign(new Error('Task not found'), { code: 'NOT_FOUND', status: 404 });
+    return data;
   }
 
   async deleteTask(taskId) {

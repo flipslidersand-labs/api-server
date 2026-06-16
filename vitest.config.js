@@ -9,6 +9,12 @@ export default defineConfig({
       reportsDirectory: './coverage',
       include: ['src/**/*.js'],
       exclude: ['src/**/*.test.js', 'src/utils/cryptoKeys.js'],
+      thresholds: {
+        lines: 60,
+        branches: 50,
+        functions: 60,
+        statements: 60,
+      },
     },
   },
 });

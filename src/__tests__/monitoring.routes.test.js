@@ -135,5 +135,25 @@ describe("monitoring routes", () => {
       const res = await request(makeApp()).get("/dashboard");
       expect(res.text).toContain("/api/tasks");
     });
+
+    it("shows OFFLINE/degraded when total requests is 0", async () => {
+      const zeroMetrics = {
+        ...METRICS,
+        requests: { total: 0, success: 0, errors: 0 },
+      };
+      mockMetrics.getMetrics.mockReturnValue(zeroMetrics);
+      mockMetrics.getErrorStats.mockReturnValue(ERRORS);
+      const res = await request(makeApp()).get("/dashboard");
+      expect(res.text).toContain("OFFLINE");
+      expect(res.text).toContain("degraded");
+    });
+
+    it("applies error CSS class when tokenErrors > 5", async () => {
+      const highErrorMetrics = { ...METRICS, tokenErrors: 10 };
+      mockMetrics.getMetrics.mockReturnValue(highErrorMetrics);
+      mockMetrics.getErrorStats.mockReturnValue(ERRORS);
+      const res = await request(makeApp()).get("/dashboard");
+      expect(res.text).toContain("error");
+    });
   });
 });

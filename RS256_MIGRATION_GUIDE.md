@@ -19,7 +19,7 @@ This guide explains how to migrate from HS256 (symmetric) JWT signing to RS256 (
 ### Step 1: Generate RSA Key Pair
 
 ```bash
-cd /home/dev-nodee/projects/ACTIVE/api-server
+cd ~/projects/ACTIVE/api-server
 node scripts/generate-rsa-keys.js
 ```
 

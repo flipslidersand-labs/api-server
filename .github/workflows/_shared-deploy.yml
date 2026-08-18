@@ -43,7 +43,7 @@ jobs:
           if [[ "${{ secrets.SSH_HOST }}" == *"192.168"* ]]; then
             echo "⚠️  Target is private network - direct SSH not available"
             echo "Setup options:"
-            echo "  1. SSH to MINIPC: ssh yuki@192.168.68.63"
+            echo "  1. SSH to MINIPC: ssh <user>@<internal-host>"
             echo "  2. Start ngrok: ngrok tcp 22"
             echo "  3. Update GitHub Secret MINIPC_HOST with ngrok URL"
             exit 0  # Continue as success; manual deployment needed

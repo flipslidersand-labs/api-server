@@ -1,0 +1,16 @@
+name: Quality
+
+on:
+  push:
+    branches: [master, main, "feat/**", "fix/**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  quality:
+    uses: flipslidersand-labs/qa-workflows/.github/workflows/node-test.yml@main
+    with:
+      node-version: "20"
+      package-manager: "npm"
+      test-script: "test"
+      coverage-threshold: 60

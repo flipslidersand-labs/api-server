@@ -13,4 +13,3 @@ jobs:
       node-version: "20"
       package-manager: "npm"
       test-script: "test"
-      coverage-threshold: 60

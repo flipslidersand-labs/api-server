@@ -289,9 +289,9 @@ CREATE TABLE task_events (
 
 ```
 SUPABASE_URL=https://babpqrypkqmivqujgeyy.supabase.co
-SUPABASE_KEY=sb_secret_ZnjhVPWaA9Ngzn_Jz4SS-...
-JWT_SECRET=6505a4b176fa43ab98e5e89c1f93b98d6b2ba9eb80ee3361fc33b3dc8b6805af
-JWT_REFRESH_SECRET=0c104426daa8b5ca9a2d9a021abce991eba04e74a37b59826534c53b2211d6cb
+SUPABASE_KEY=<your-supabase-key>
+JWT_SECRET=<your-jwt-secret>
+JWT_REFRESH_SECRET=<your-jwt-refresh-secret>
 PORT=3000
 ```
 

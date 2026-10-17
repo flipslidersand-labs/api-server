@@ -288,10 +288,10 @@ CREATE TABLE task_events (
 ### 環境変数（Render ダッシュボードで設定）
 
 ```
-SUPABASE_URL=https://babpqrypkqmivqujgeyy.supabase.co
-SUPABASE_KEY=sb_secret_ZnjhVPWaA9Ngzn_Jz4SS-...
-JWT_SECRET=6505a4b176fa43ab98e5e89c1f93b98d6b2ba9eb80ee3361fc33b3dc8b6805af
-JWT_REFRESH_SECRET=0c104426daa8b5ca9a2d9a021abce991eba04e74a37b59826534c53b2211d6cb
+SUPABASE_URL=https://<project-ref>.supabase.co
+SUPABASE_KEY=<set-in-dashboard>
+JWT_SECRET=<set-in-dashboard>
+JWT_REFRESH_SECRET=<set-in-dashboard>
 PORT=3000
 ```
 

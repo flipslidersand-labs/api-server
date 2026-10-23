@@ -12,4 +12,5 @@ jobs:
     with:
       node-version: "22"
       package-manager: pnpm
-      runner: linux-general
+      # runner は渡さない: api-server は public で linux-general(private 限定グループ)に載らない。
+      # quality.yml と同じく reusable 側の解決（vars.GATE_RUNNER → ubuntu-latest）に任せる

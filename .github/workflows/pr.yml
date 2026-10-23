@@ -6,4 +6,10 @@ on:
 
 jobs:
   check:
-    uses: ./.github/workflows/_shared-pr-check.yml
+    # コピー配布をやめ qa-workflows の reusable に集約（dev-platform#1855）。
+    # lint / build / test は script があれば実行し、失敗はそのまま赤にする。
+    uses: flipslidersand-labs/qa-workflows/.github/workflows/node-test.yml@main
+    with:
+      node-version: "22"
+      package-manager: pnpm
+      runner: linux-general

@@ -288,7 +288,7 @@ CREATE TABLE task_events (
 ### 環境変数（Render ダッシュボードで設定）
 
 ```
-SUPABASE_URL=https://babpqrypkqmivqujgeyy.supabase.co
+SUPABASE_URL=https://<project-ref>.supabase.co
 SUPABASE_KEY=<your-supabase-key>
 JWT_SECRET=<your-jwt-secret>
 JWT_REFRESH_SECRET=<your-jwt-refresh-secret>

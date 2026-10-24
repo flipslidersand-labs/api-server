@@ -1,0 +1,13 @@
+# 誤検知の allowlist（ADR-007: パスとルールを限定する）。
+# いずれも鍵の書式を説明する例示で、本文が '...' か短い説明文。実鍵ではない（2026-10-24 確認）。
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "private-key の例示（ドキュメント・.env.example）"
+targetRules = ["private-key"]
+paths = [
+  '''^RS256_MIGRATION_GUIDE\.md$''',
+  '''^PRODUCTION_READINESS\.md$''',
+  '''^\.env\.example$''',
+]

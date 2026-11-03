@@ -1,11 +1,9 @@
 name: Deploy
 
+# push 契約は外した: デプロイ先 (MINIPC) はクラウド runner から届かず、main へ毎回 failure が残るため。
+# self-hosted runner を用意できたら push トリガーを戻す。手動実行は ref を選んで走らせる。
 on:
-  push:
-    branches:
-      - main
-      - master
-      - develop
+  workflow_dispatch:
 
 jobs:
   deploy-staging:
